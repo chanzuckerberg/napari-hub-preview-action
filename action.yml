@@ -1,0 +1,69 @@
+name: 'napari hub preview page'
+description: 'Action for building napari hub preview page.'
+inputs:
+  hub-ref:
+    required: false
+    description: 'Ref to use when cloning the napari-hub repo'
+    default: 'main'
+runs:
+  using: 'composite'
+  steps:
+    - name: Build plugin
+      shell: bash
+      # TODO add actual plugin builder
+      run: cp plugin.json preview.json
+
+    - name: Clone napari hub repo
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ inputs.hub-ref }}
+        repository: chanzuckerberg/napari-hub
+        path: napari-hub
+
+    - name: Copy plugin json to hub frontend repo
+      shell: bash
+      run: cp preview.json napari-hub/frontend
+
+    - name: Setup Node
+      uses: actions/setup-node@v2
+      with:
+        node-version: 15.x
+
+    - name: Get Yarn cache directory path
+      shell: bash
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Setup Yarn cache
+      uses: actions/cache@v2
+      # use this to check for `cache-hit`:
+      # (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: Install dependencies with yarn
+      shell: bash
+      working-directory: napari-hub/frontend
+      run: yarn install
+
+    - name: Fetch PR url
+      id: pr-url
+      uses: kceb/pull-request-url-action@v1
+
+    - name: Build the preview page
+      shell: bash
+      run: yarn build:preview
+      working-directory: napari-hub/frontend
+      env:
+        # BASE_PATH: /${{ github.repository }}/${{ github.event.pull_request.head.sha }}
+        PREVIEW: preview.json
+        PREVIEW_PULL_REQUEST: ${{ steps.pr-url.outputs.url }}
+
+    - name: Upload preview page artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: preview-page
+        path: napari-hub/frontend/preview
