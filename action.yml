@@ -1,18 +1,15 @@
 name: 'napari hub preview page'
 description: 'Action for building napari hub preview page.'
+
 inputs:
   hub-ref:
     required: false
     description: 'Ref to use when cloning the napari-hub repo'
     default: 'main'
+
 runs:
   using: 'composite'
   steps:
-    - name: Build plugin
-      shell: bash
-      # TODO add actual plugin builder
-      run: cp plugin.json preview.json
-
     - name: Clone napari hub repo
       uses: actions/checkout@v2
       with:
@@ -20,14 +17,20 @@ runs:
         repository: chanzuckerberg/napari-hub
         path: napari-hub
 
+    - name: Build plugin
+      shell: bash
+      run: |
+        pip install -r napari-hub/backend/requirements.txt
+        python napari-hub/backend/get_preview.py --local . .
+
     - name: Copy plugin json to hub frontend repo
       shell: bash
-      run: cp preview.json napari-hub/frontend
+      run: cp preview_meta.json napari-hub/frontend/preview.json
 
     - name: Setup Node
       uses: actions/setup-node@v2
       with:
-        node-version: 15.x
+        node-version: 16.x
 
     - name: Get Yarn cache directory path
       shell: bash
@@ -44,6 +47,7 @@ runs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
+
     - name: Install dependencies with yarn
       shell: bash
       working-directory: napari-hub/frontend
