@@ -62,7 +62,7 @@ runs:
       run: yarn build:preview
       working-directory: napari-hub/frontend
       env:
-        # BASE_PATH: /${{ github.repository }}/${{ github.event.pull_request.head.sha }}
+        BASE_PATH: /${{ github.repository }}/${{ github.event.workflow_run.id }}
         PREVIEW: preview.json
         PREVIEW_PULL_REQUEST: ${{ steps.pr-url.outputs.url }}
 
