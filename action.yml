@@ -53,10 +53,6 @@ runs:
       working-directory: napari-hub/frontend
       run: yarn install
 
-    - name: Fetch PR url
-      id: pr-url
-      uses: kceb/pull-request-url-action@v1
-
     - name: Build the preview page
       shell: bash
       run: yarn build:preview
@@ -64,7 +60,7 @@ runs:
       env:
         BASE_PATH: /${{ github.repository }}/${{ github.event.pull_request.number }}
         PREVIEW: preview.json
-        PREVIEW_PULL_REQUEST: ${{ steps.pr-url.outputs.url }}
+        PREVIEW_PULL_REQUEST: https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}
 
     - name: Upload preview page artifact
       uses: actions/upload-artifact@v2
