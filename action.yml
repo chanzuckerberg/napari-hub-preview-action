@@ -19,9 +19,11 @@ runs:
 
     - name: Build plugin
       shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
       run: |
         pip install -r napari-hub/backend/requirements.txt
-        python napari-hub/backend/get_preview.py --local . .
+        python napari-hub/backend/get_preview.py --local --branch ${{ github.head_ref }} . .
 
     - name: Copy plugin json to hub frontend repo
       shell: bash
