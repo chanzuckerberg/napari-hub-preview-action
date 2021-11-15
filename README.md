@@ -4,10 +4,10 @@ This GitHub action generates a napari hub plugin preview page and produces the s
 an artifact.
 
 To view your plugin as it would appear on the napari hub, first install the [napari hub Plugin Preview App](https://github.com/apps/napari-hub-plugin-preview)
-to your plugin repository, and then use this action in a workflow file, as in [this example](link-to-yml-snippet).
+to your plugin repository, and then use this action in a workflow file, as in [this example](https://github.com/chanzuckerberg/napari-hub/blob/main/docs/setting-up-preview.md#2-set-up-the-github-workflow).
 
 For more detailed instructions on installing the app, adding the action to a workflow or using the preview page, you
-can refer to [this guide](link-to-main-guide).
+can refer to [this guide](https://github.com/chanzuckerberg/napari-hub/blob/main/docs/setting-up-preview.md).
 
 If you notice any problems using this action, please let us know by raising an issue on [this repo](https://github.com/chanzuckerberg/napari-hub-preview-action/issues/new).
 
