@@ -16,7 +16,10 @@ runs:
         ref: ${{ inputs.hub-ref }}
         repository: chanzuckerberg/napari-hub
         path: napari-hub
-
+    - name: Set up Python 3
+      uses: actions/setup-python@v2
+      with: 
+        python-version: '3.8'
     - name: Build plugin
       shell: bash
       env:
