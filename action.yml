@@ -10,6 +10,10 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Clone plugin repo
+      uses: actions/checkout@v2
+      with:
+        path: plugin
     - name: Clone napari hub repo
       uses: actions/checkout@v2
       with:
@@ -20,6 +24,13 @@ runs:
       uses: actions/setup-python@v2
       with: 
         python-version: '3.8'
+    - name: Install plugin
+      shell: bash
+      run: |
+        pip install -e ./plugin
+        # push this to a branch on my origin
+        # try to use this action from this branch, with hub ref to my branched dev lambda and see if the preview-meta builds
+        # check out the build artifact on that action run
     - name: Build plugin
       shell: bash
       env:
