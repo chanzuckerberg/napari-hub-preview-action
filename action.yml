@@ -24,8 +24,10 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ github.token }}
+      # satisfying npe2 dependency here to avoid bringing it into the backend
       run: |
         pip install -r napari-hub/backend/requirements.txt
+        pip install npe2
         python napari-hub/backend/get_preview.py --local --branch ${{ github.head_ref }} . .
 
     - name: Copy plugin json to hub frontend repo
