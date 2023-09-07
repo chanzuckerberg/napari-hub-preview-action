@@ -1,3 +1,7 @@
+# Deprecated
+
+We are archiving this repository as a part of [napari-hub plugin previews deprecation](https://github.com/chanzuckerberg/napari-hub/discussions/1216). We will no longer continue to work on this repository. Thank you for all the contributions.
+
 # napari hub preview action
 
 This GitHub action generates a napari hub plugin preview page and produces the static page as
